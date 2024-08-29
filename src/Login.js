@@ -1,61 +1,53 @@
-// src/Login.js
+// src/components/Login.js
 import React, { useState } from "react";
-import "./Login.css"; // Import a CSS file for styling
+import { FaUser, FaLock } from "react-icons/fa";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [errors, setErrors] = useState({});
+  const [formData, setFormData] = useState({ username: "", password: "" });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const validateForm = () => {
-    let errors = {};
-    if (!formData.email) errors.email = "Email is required";
-    if (!formData.password) errors.password = "Password is required";
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log("Login successful", formData);
-      // Handle login logic here
-    }
+    console.log("Login Data", formData);
+    // Add your login logic here
   };
 
   return (
-    <div className="auth-container">
+    <form onSubmit={handleSubmit} className="form">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
+      <div className="input-container">
+        <FaUser className="icon" />
         <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={formData.username}
           onChange={handleChange}
+          required
         />
-        {errors.email && <p className="error">{errors.email}</p>}
+      </div>
+      <div className="input-container">
+        <FaLock className="icon" />
         <input
           type="password"
           name="password"
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
+          required
         />
-        {errors.password && <p className="error">{errors.password}</p>}
-        <button type="submit">Login</button>
-      </form>
-    </div>
+      </div>
+      <button type="submit" className="submit-button">
+        Login
+      </button>
+      <p className="login-link">
+  Not yet Registered <Link to="/sign-up">Sign Up Here</Link>
+</p>
+
+    </form>
   );
 };
 

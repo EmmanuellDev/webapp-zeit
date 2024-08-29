@@ -1,7 +1,7 @@
-// src/Signup.js
+// src/components/Signup.js
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // To navigate to the Login page
-import "./Signup.css"; // Updated CSS file name
+import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc"; // Google Icon
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -12,107 +12,132 @@ const Signup = () => {
     confirmPassword: "",
   });
 
-  const [errors, setErrors] = useState({});
-
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const validateForm = () => {
-    let errors = {};
-    if (!formData.firstName) errors.firstName = "First Name is required";
-    if (!formData.lastName) errors.lastName = "Last Name is required";
-    if (!formData.email) errors.email = "Email is required";
-    if (!formData.password) errors.password = "Password is required";
-    if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = "Passwords do not match";
-    }
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log("Signup successful", formData);
-      // Handle signup logic here
+
+    // Validate password match
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
     }
+
+    console.log("Signup Data", formData);
+    // Add your signup logic here
+  };
+
+  const handleGoogleSignup = () => {
+    console.log("Google signup clicked");
+    // Add your Google signup logic here
   };
 
   return (
-    <div className="auth-container">
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="name-fields">
-          <div className="input-group">
+    <div className="form-container">
+      {/* Sign Up Form */}
+      <form onSubmit={handleSubmit} className="form">
+        <h2>Create Your Account</h2>
+        <p>Let's get started your journey with coding</p>
+
+        {/* Google Signup Option */}
+        <button type="button" className="google-button" onClick={handleGoogleSignup}>
+          <FcGoogle className="icon" /> Continue with Google
+        </button>
+
+        {/* OR Separator */}
+        <div className="separator">
+          <span>-----Or-----</span>
+        </div>
+
+        {/* Name Inputs - Flex Container */}
+        <div className="input-flex">
+          {/* First Name Input */}
+          <div className="input-container">
+            <FaUser className="icon" />
             <input
               type="text"
               name="firstName"
               placeholder="First Name"
               value={formData.firstName}
               onChange={handleChange}
+              required
             />
-            {errors.firstName && <p className="error">{errors.firstName}</p>}
           </div>
 
-          <div className="input-group">
+          {/* Last Name Input */}
+          <div className="input-container">
+            <FaUser className="icon" />
             <input
               type="text"
               name="lastName"
               placeholder="Last Name"
               value={formData.lastName}
               onChange={handleChange}
+              required
             />
-            {errors.lastName && <p className="error">{errors.lastName}</p>}
           </div>
         </div>
 
-        <div className="input-group">
+        {/* Email Input */}
+        <div className="input-container">
+          <FaEnvelope className="icon" />
           <input
             type="email"
             name="email"
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
+            required
           />
-          {errors.email && <p className="error">{errors.email}</p>}
         </div>
 
-        <div className="input-group">
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          {errors.password && <p className="error">{errors.password}</p>}
+        {/* Password Inputs - Flex Container */}
+        <div className="input-flex">
+          {/* Password Input */}
+          <div className="input-container">
+            <FaLock className="icon" />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* Confirm Password Input */}
+          <div className="input-container">
+            <FaLock className="icon" />
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
 
-        <div className="input-group">
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-          />
-          {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
-        </div>
-
-        <p className="terms">
-          By signing up, you are agreeing to the{" "}
-          <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>.
+        {/* Terms of Service and Privacy Policy Text */}
+        <p className="terms-text">
+          By signing up, you are agreeing to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
         </p>
 
-        <button type="submit">Sign Up</button>
+        {/* Signup Button */}
+        <button type="submit" className="submit-button">
+          Sign Up
+        </button>
+
+        {/* Login Link */}
+        <p className="login-link">
+  Already have an account? <Link to="/login">Login Here</Link>
+</p>
+
       </form>
-      <p className="login-link">
-        Already have an account? <Link to="/login">Login here.</Link>
-      </p>
     </div>
   );
 };
