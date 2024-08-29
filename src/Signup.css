@@ -1,100 +1,171 @@
-/* src/Signup.css */
 body {
-    background-color: #f0f0f0; /* Light gray background */
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex; /* Flexbox to center content */
-    justify-content: center; /* Horizontally center content */
-    align-items: center; /* Vertically center content */
-    height: 100vh; /* Full viewport height */
-  }
-  
-  .auth-container {
-    width: 400px;
-    padding: 30px;
-    border-radius: 8px;
-    background-color: white; /* White background for form */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .auth-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .name-fields {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px; /* Ensure good space between name fields */
-    margin-bottom: 20px; /* Margin below name fields */
-  }
-  
-  .input-group {
-    display: flex;
-    flex-direction: column; /* Stack input and error vertically */
-    width: 100%; /* Full width for consistent layout */
-    margin-bottom: 20px; /* Consistent spacing between fields */
-  }
-  
-  .name-fields .input-group {
-    width: calc(50% - 10px); /* Ensure both fields fit in the same line with gap */
-  }
-  
-  .input-group input {
-    width: 100%; /* Fill the width of the parent container */
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  .auth-container .error {
-    color: red;
-    font-size: 0.8em;
-    margin-top: 5px; /* Small space above error */
-  }
-  
-  .auth-container .terms {
-    font-size: 0.8em;
-    margin: 20px 0;
-    text-align: center;
-  }
-  
-  .auth-container .terms a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .auth-container .terms a:hover {
-    text-decoration: underline;
-  }
-  
-  .auth-container button {
-    width: 100%;
-    padding: 12px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  .auth-container button:hover {
-    background-color: #218838;
-  }
-  
-  .auth-container .login-link {
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .auth-container .login-link a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .auth-container .login-link a:hover {
-    text-decoration: underline;
-  }
-  
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.form-container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  margin: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+h2 {
+  margin-bottom: 5px;
+  color: #333;
+  font-size: 24px;
+}
+
+p {
+  color: #666;
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  font-size: 14px;
+  width: 100%;
+  gap: 10px;
+}
+
+.google-button:hover {
+  background-color: #f7f7f7;
+}
+
+.separator {
+  margin: 15px 0;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+.input-container {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.input-container .icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #888;
+}
+
+.input-container input {
+  width: 100%;
+  padding: 10px 10px 10px 35px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.input-container input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.input-flex {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.submit-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.terms-text {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  margin: 10px 0;
+  line-height: 1.5;
+}
+
+.terms-text a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.terms-text a:hover {
+  text-decoration: underline;
+}
+
+.login-link {
+  font-size: 14px;
+  color: #333;
+  text-align: right;
+  margin-top: 15px;
+}
+
+.login-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #888;
+}
+
+.eye-icon:hover {
+  color: #7aefff;
+}
+
+.error-text {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
