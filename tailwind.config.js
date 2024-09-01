@@ -1,9 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [],
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}", // Adjust this if needed to match your file structure
+  ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        baskervville: ['Baskervville SC', 'serif'],
+      },
+    },
   },
   plugins: [],
 }
-
