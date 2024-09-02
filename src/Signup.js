@@ -3,8 +3,9 @@ import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import backgroundImage from "./img/imgg-3.jpg"; // Adjust the path to your background image
-import signupImage from "./img/zeit-signup.jpg"; // Adjust the path to your new image
+import backgroundImage from "./img/imgg-3.jpg";
+import signupImage from "./img/zeit-signup.jpg";
+import { auth, db, doc, setDoc, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from "./firebase";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ const Signup = () => {
     return regex.test(password);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validatePassword(formData.password)) {
@@ -45,11 +46,40 @@ const Signup = () => {
     }
 
     setPasswordError("");
-    console.log("Signup Data", formData);
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      const user = userCredential.user;
+
+      await setDoc(doc(db, "users", user.uid), {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+      });
+
+      console.log("User registered successfully:", user);
+    } catch (error) {
+      console.error("Error during signup:", error.message);
+      setPasswordError(error.message);
+    }
   };
 
-  const handleGoogleSignup = () => {
-    console.log("Google signup clicked");
+  const handleGoogleSignup = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      await setDoc(doc(db, "users", user.uid), {
+        firstName: user.displayName.split(" ")[0],
+        lastName: user.displayName.split(" ")[1] || "",
+        email: user.email,
+      });
+
+      console.log("User signed in with Google:", user);
+    } catch (error) {
+      console.error("Error during Google signup:", error.message);
+    }
   };
 
   const togglePasswordVisibility = () => {

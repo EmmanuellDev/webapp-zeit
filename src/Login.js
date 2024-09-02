@@ -76,7 +76,7 @@ const Login = () => {
               className="w-full flex items-center justify-center border border-gray-300 py-2 rounded-lg mb-4 hover:bg-gray-100"
               onClick={handleGoogleLogin}
             >
-              <FcGoogle className="mr-2" /> Continue with Google
+              <FcGoogle className="mr-2 font-semibold" /> Continue with Google
             </button>
 
             <div className="flex items-center justify-center text-black text-sm mb-4">

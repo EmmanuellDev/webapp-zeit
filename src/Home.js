@@ -22,7 +22,7 @@ const HomePage = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 2000); // Change image every 2 seconds
+    }, 5000); // Change image every 2 seconds
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
