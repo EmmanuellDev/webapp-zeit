@@ -1,8 +1,8 @@
+// firebase.js
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";  // Ensure this import is present
+import { getFirestore } from "firebase/firestore";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAbyKVVLHRoro9ohFFi-bWPIEPUxCJeQuw",
   authDomain: "zeit-club.firebaseapp.com",
@@ -15,8 +15,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase Authentication and Firestore
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Export Firebase services
-export { app, auth, db, doc, setDoc, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword };
+export { auth, db };  // Make sure to export auth

@@ -1,10 +1,15 @@
+// Login.js
 import React, { useState } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import backgroundImage from './img/imgg-3.jpg'; 
-import zeitLoginImage from './img/zeit-login.jpg'; // Import the image
+import zeitLoginImage from './img/zeit-login.jpg';
+import { signInWithEmailAndPassword } from "firebase/auth";  // Import signInWithEmailAndPassword from Firebase Auth
+import { auth } from "./firebase";  // Import auth from your firebase configuration file
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -14,12 +19,13 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const navigate = useNavigate(); // For navigation after login
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
@@ -34,7 +40,15 @@ const Login = () => {
     }
 
     setLoginError("");
-    console.log("Login Data", formData);
+
+    try {
+      await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      toast.success("Login Successful!");
+      navigate("/dashboard"); // Redirect to dashboard
+    } catch (error) {
+      setLoginError(error.message);
+      toast.error("Login Failed: " + error.message);
+    }
   };
 
   const handleGoogleLogin = () => {
@@ -140,6 +154,7 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <ToastContainer /> {/* Render ToastContainer */}
     </div>
   );
 };

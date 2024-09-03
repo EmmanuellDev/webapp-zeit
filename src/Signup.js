@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import backgroundImage from "./img/imgg-3.jpg";
 import signupImage from "./img/zeit-signup.jpg";
-import { auth, db, doc, setDoc, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from "./firebase";
+import { auth, db } from "./firebase";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { toast } from 'react-toastify'; // Importing react-toastify for notifications
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +26,8 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+
+  const navigate = useNavigate(); // Use useNavigate hook for redirection
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -48,19 +57,29 @@ const Signup = () => {
     setPasswordError("");
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      // Create user with email and password
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
       const user = userCredential.user;
 
+      // Save user data in Firestore
       await setDoc(doc(db, "users", user.uid), {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
+        createdAt: new Date(),
       });
 
-      console.log("User registered successfully:", user);
+      toast.success("Registered Successfully. Proceed with Login."); // Show success toast notification
+      setTimeout(() => {
+        navigate("/login"); // Redirect to login page after 2 seconds
+      }, 2000);
     } catch (error) {
       console.error("Error during signup:", error.message);
-      setPasswordError(error.message);
+      toast.error(error.message); // Show error toast notification
     }
   };
 
@@ -70,15 +89,21 @@ const Signup = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
+      // Save user data in Firestore
       await setDoc(doc(db, "users", user.uid), {
-        firstName: user.displayName.split(" ")[0],
-        lastName: user.displayName.split(" ")[1] || "",
+        firstName: user.displayName?.split(" ")[0] || "",
+        lastName: user.displayName?.split(" ")[1] || "",
         email: user.email,
+        createdAt: new Date(),
       });
 
-      console.log("User signed in with Google:", user);
+      toast.success("Registered Successfully. Proceed with Login."); // Show success toast notification
+      setTimeout(() => {
+        navigate("/login"); // Redirect to login page after 2 seconds
+      }, 2000);
     } catch (error) {
       console.error("Error during Google signup:", error.message);
+      toast.error(error.message); // Show error toast notification
     }
   };
 
@@ -93,7 +118,11 @@ const Signup = () => {
   return (
     <div
       className="flex justify-center items-center min-h-screen"
-      style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
       <div className="flex justify-center items-center w-3/4 max-w-4xl p-8">
         {/* Glass Effect Container */}
@@ -196,17 +225,12 @@ const Signup = () => {
                 <label className="absolute left-10 top-1/2 transform -translate-y-1/2 text-black duration-300 origin-[0] bg-white px-1 peer-placeholder-shown:top-1/2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4">
                   Password
                 </label>
-                {showPassword ? (
-                  <AiFillEye
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black cursor-pointer"
-                    onClick={togglePasswordVisibility}
-                  />
-                ) : (
-                  <AiFillEyeInvisible
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black cursor-pointer"
-                    onClick={togglePasswordVisibility}
-                  />
-                )}
+                <div
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black cursor-pointer"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
+                </div>
               </div>
 
               {/* Confirm Password Input */}
@@ -224,31 +248,32 @@ const Signup = () => {
                 <label className="absolute left-10 top-1/2 transform -translate-y-1/2 text-black duration-300 origin-[0] bg-white px-1 peer-placeholder-shown:top-1/2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4">
                   Confirm Password
                 </label>
-                {showConfirmPassword ? (
-                  <AiFillEye
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black cursor-pointer"
-                    onClick={toggleConfirmPasswordVisibility}
-                  />
-                ) : (
-                  <AiFillEyeInvisible
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black cursor-pointer"
-                    onClick={toggleConfirmPasswordVisibility}
-                  />
-                )}
+                <div
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black cursor-pointer"
+                  onClick={toggleConfirmPasswordVisibility}
+                >
+                  {showConfirmPassword ? <AiFillEye /> : <AiFillEyeInvisible />}
+                </div>
               </div>
 
               {/* Display Password Error if Exists */}
               {passwordError && (
-                <p className="text-red-500 text-center text-sm">{passwordError}</p>
+                <div className="text-red-500 text-center">{passwordError}</div>
               )}
 
               <p className="text-xs text-black text-center mt-4">
                 By signing up, you agree to the{" "}
-                <a href="#" className="text-black underline font-semibold hover:underline">
+                <a
+                  href="#"
+                  className="text-black underline font-semibold hover:underline"
+                >
                   Terms of Service
                 </a>{" "}
                 and{" "}
-                <a href="#" className="text-black font-semibold underline hover:underline">
+                <a
+                  href="#"
+                  className="text-black font-semibold underline hover:underline"
+                >
                   Privacy Policy
                 </a>
                 .
@@ -257,16 +282,20 @@ const Signup = () => {
               {/* Signup Button */}
               <button
                 type="submit"
-                className="bg-black text-white px-4 py-2 border-white border-2 rounded-md w-full hover:bg-white hover:text-black hover:text-2px hover:border-black"
+                className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-700"
               >
-                Sign Up
+                Create Account
               </button>
             </form>
 
-            <p className="text-black text-center">
+            {/* Login Link */}
+            <p className="text-center text-sm text-black mt-2">
               Already have an account?{" "}
-              <Link to="/login" className="text-black font-semibold underline hover:underline">
-                Log In
+              <Link
+                to="/login"
+                className="font-medium text-black hover:text-gray-800"
+              >
+                Log in
               </Link>
             </p>
           </div>
