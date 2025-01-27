@@ -32,7 +32,7 @@ const HomePage = () => {
   };
 
   const handleJoinNowClick = () => {
-    navigate('./sign-up'); // Redirect to sign-up page
+    navigate('./signup'); // Redirect to sign-up page
   };
 
   return (
